@@ -225,6 +225,61 @@ public abstract class TiUIAbstractTabGroup extends TiUIView
 	}
 
 	/**
+	 * Method for creating a ColorStateList instance for bottom tab titles.
+	 * It creates a ColorStateList with two states - one for the provided parameter and
+	 * one for the negative value of the provided parameter.
+	 * If the properties are not set the method falls back to the textColorPrimary of the
+	 * current theme for inactive and colorPrimary for active.
+	 * Icon active color is set by the properties tintColor, tabsTintColor,
+	 * activeTabIconTint in that order, each overriding the last.
+	 *
+	 * @param tabGroupProxy proxy from which are the values taken.
+	 * @param stateToUse appropriate state for the Controller type.
+	 * @return ColorStateList for the provided state.
+	 */
+	protected ColorStateList itemTextColorStateList(TabGroupProxy tabGroupProxy, int stateToUse)
+	{
+
+		int[][] itemTextColorStates = new int[][] { new int[] { -stateToUse }, new int[] { stateToUse } };
+		int[] itemTextColors = { tabGroupProxy.hasPropertyAndNotNull(TiC.PROPERTY_UNSELECTED_ITEM_TINT_COLOR)
+		                         ? TiColorHelper.parseColor( tabGroupProxy.getProperty(TiC.PROPERTY_UNSELECTED_ITEM_TINT_COLOR).toString())
+		                         : this.textColorInt,
+		                         tabGroupProxy.hasPropertyAndNotNull(TiC.PROPERTY_TABS_TINT_COLOR)
+		                         ? TiColorHelper.parseColor( tabGroupProxy.getProperty(TiC.PROPERTY_TABS_TINT_COLOR).toString())
+		                         : tabGroupProxy.hasPropertyAndNotNull(TiC.PROPERTY_TINT_COLOR)
+		                           ? TiColorHelper.parseColor( tabGroupProxy.getProperty(TiC.PROPERTY_TINT_COLOR).toString())
+		                           : this.colorPrimaryInt };
+		ColorStateList stateListDrawable = new ColorStateList(itemTextColorStates, itemTextColors);
+		return stateListDrawable;
+	}
+
+	/**
+	 * Method for creating a ColorStateList instance for bottom tab icons.
+	 * It creates a ColorStateList with two states - one for the provided parameter and
+	 * one for the negative value of the provided parameter.
+	 * If the properties are not set the method falls back to the textColorPrimary of the
+	 * current theme for inactive and colorPrimary for active.
+	 *
+	 * @param tabGroupProxy proxy from which are the values taken.
+	 * @param stateToUse appropriate state for the Controller type.
+	 * @return ColorStateList for the provided state.
+	 */
+	protected ColorStateList itemIconTintColorStateList(TabGroupProxy tabGroupProxy, int stateToUse)
+	{
+
+		int[][] itemIconTintColorStates = new int[][] { new int[] { -stateToUse }, new int[] { stateToUse } };
+		int[] itemIconTintColors = { tabGroupProxy.hasPropertyAndNotNull(TiC.PROPERTY_UNSELECTED_ITEM_TINT_COLOR)
+		                         ? TiColorHelper.parseColor( tabGroupProxy.getProperty(TiC.PROPERTY_UNSELECTED_ITEM_TINT_COLOR).toString())
+		                         : this.textColorInt,
+		                         tabGroupProxy.hasPropertyAndNotNull(TiC.PROPERTY_ACTIVE_TAB_ICON_TINT)
+		                         ? TiColorHelper.parseColor( tabGroupProxy.getProperty(TiC.PROPERTY_ACTIVE_TAB_ICON_TINT).toString())
+		                         : this.colorPrimaryInt };
+
+		ColorStateList stateListDrawable = new ColorStateList(itemIconTintColorStates, itemIconTintColors);
+		return stateListDrawable;
+	}
+
+	/**
 	 * Method for creating a RippleDrawable to be used as a bacgkround for an item in the Controller.
 	 * Creates the RippleDrawable for two states - the provided state and its negative value.
 	 * If the properties are not set the method falls back to the colorPrimary of the current theme.

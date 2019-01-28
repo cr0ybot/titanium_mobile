@@ -6,6 +6,7 @@
  */
 package ti.modules.titanium.ui.widget.tabgroup;
 
+import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.graphics.Rect;
 import android.support.design.internal.BottomNavigationItemView;
@@ -87,6 +88,19 @@ public class TiUIBottomNavigationTabGroup extends TiUIAbstractTabGroup implement
 				TiColorHelper.parseColor(proxy.getProperty(TiC.PROPERTY_TABS_BACKGROUND_COLOR).toString()));
 		} else {
 			this.mBottomNavigationView.setBackgroundColor(this.colorPrimaryInt);
+		}
+
+		// Set icon and text colors for "checked" and "unchecked" states
+		if (proxy.hasPropertyAndNotNull(TiC.PROPERTY_TABS_TINT_COLOR) || // Active icon & text color
+		    proxy.hasPropertyAndNotNull(TiC.PROPERTY_TINT_COLOR) || // Active icon & text color
+		    proxy.hasPropertyAndNotNull(TiC.PROPERTY_UNSELECTED_ITEM_TINT_COLOR) ) { // Inactive icon & text color
+			this.mBottomNavigationView.setItemTextColor(itemTextColorStateList((TabGroupProxy) proxy, android.R.attr.state_checked));
+		}
+		if (proxy.hasPropertyAndNotNull(TiC.PROPERTY_ACTIVE_TAB_ICON_TINT) || // Active icon color
+		    proxy.hasPropertyAndNotNull(TiC.PROPERTY_TABS_TINT_COLOR) || // Active icon & text color
+		    proxy.hasPropertyAndNotNull(TiC.PROPERTY_TINT_COLOR) || // Active icon & text color
+		    proxy.hasPropertyAndNotNull(TiC.PROPERTY_UNSELECTED_ITEM_TINT_COLOR) ) { // Inactive icon & text color
+			this.mBottomNavigationView.setItemIconTintList(itemIconTintColorStateList((TabGroupProxy) proxy, android.R.attr.state_checked));
 		}
 
 		// Add tab bar and view pager to the root Titanium view.
